@@ -46,7 +46,6 @@ describe('formController', function() {
 
   xit('should call localStorage.insert to add a guest', function(){
     formController.addGuest();
-    spyOn().
   });
 
   xit('should have a working submit', function(){
