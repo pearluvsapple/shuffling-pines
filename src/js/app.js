@@ -86,7 +86,7 @@ angular.module('shuffling', [])
     //`Remove ${thisGuest.guestName}?` causes Karma and Gulp to crash
     //do those characters need to be escaped?
     this.removeGuest = function(thisGuest) {
-      if (!confirm('Remove ${thisGuest.guestName}?')) {
+      if (!confirm('Remove ' + thisGuest.guestName + '?')) {
         return;
       }
 

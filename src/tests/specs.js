@@ -44,8 +44,9 @@ describe('formController', function() {
     expect(ourGuests.length).toEqual(4);
   });
 
-  xit('should add a guest', function(){
-
+  xit('should call localStorage.insert to add a guest', function(){
+    formController.addGuest();
+    spyOn().
   });
 
   xit('should have a working submit', function(){
