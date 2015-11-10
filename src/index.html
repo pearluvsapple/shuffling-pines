@@ -6,92 +6,131 @@
     <title>Shuffling Pines</title>
     <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css" />
 
+    <link rel="stylesheet" href="../src/css/styles.css" />
+
     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
     <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="../bower_components/angular/angular.min.js"></script>
 
-    <script src="../src/app.js"></script>
+
+    <script src="../src/js/app.js"></script>
   </head>
 
   <body>
-    <h1>Shuffling Pines</h1>
-    <div class="row">
-      <div class="col-md-12">
-        <!-- Nav tabs -->
-        <ul class="nav nav-tabs" role="tablist">
-          <li role="presentation" class="active"><a href="#form" aria-controls="form" role="tab" data-toggle="tab">Form</a></li>
-          <li role="presentation"><a href="#guests" aria-controls="guests" role="tab" data-toggle="tab">Guests</a></li>
-        </ul>
+    <div id="wrapper" class="container">
+      <h1>Shuffling Pines</h1>
+      <div class="row">
+        <div class="col-md-12" ng-controller="TabController as tabCtrl">
+          <!-- Nav tabs -->
+          <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" ng-class="{active: tabCtrl.checkTab(1)}" ng-click="tabCtrl.setTab(1)"><a href="#form" aria-controls="form" role="tab" data-toggle="tab">Form</a></li>
+            <li role="presentation" ng-class="{active: tabCtrl.checkTab(2)}" ng-click="tabCtrl.setTab(2)"><a href="#guests" aria-controls="guests" role="tab" data-toggle="tab">Guests</a></li>
+          </ul>
 
-        <!-- Tab panes -->
-        <div class="tab-content">
-          <!-- Tab pane 1 -->
-          <div role="tabpanel" class="tab-pane active" id="form">
-            <div>
+          <!-- Tab panes -->
+          <div class="container">
+            <div class="tab-content col-md-8">
+              <!-- Tab pane 1 -->
+              <div role="tabpanel" class="tab-pane" ng-class="{active: tabCtrl.checkTab(1)}" id="form" ng-show="tabCtrl.checkTab(1)" required>
+                <div>
 
-              <form class="col-md-6 well">
-                <div class="form-group">
-                  <label for="guest-name">Guest Name</label>
-                  <input type="text" class="form-control" id="guest-name" placeholder="">
-                </div>
-                <div class="form-group">
-                  <label for="transition-date">Transition Date</label>
-                  <input type="date" class="form-control" id="transition-date" placeholder="">
-                </div>
-                <div class="radio">
-                  <label>
-                    <input type="radio" name="pickup-dropoff" id="pickup" value="pickup" checked>
-                    Pick-up
-                  </label>
-                </div>
-                <div class="radio">
-                  <label>
-                    <input type="radio" name="pickup-dropoff" id="dropoff" value="dropoff">
-                    Drop-off
-                  </label>
-                </div>
-                <div class="form-group">
-                  <label for="location">Location</label>
-                  <textarea class="form-control" id="location"></textarea>
-                </div>
-                <button type="submit" class="btn">Submit</button>
-              </form>
+                  <form id="shuffleGuest" class="col-md-8 well" ng-controller="FormController as formCtrl" ng-submit="formCtrl.addGuest(); tabCtrl.setTab(2)" required>
+                    <div class="form-group">
+                      <label for="guestName">Guest Name</label>
+                      <input type="text" class="form-control" ng-model="formCtrl.guestName" id="guestName" placeholder="" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="transitionDate">Transition Date</label>
+                      <input type="date" class="form-control" ng-model="formCtrl.transitionDate" id="transitionDate" placeholder="" required>
+                    </div>
 
-              <!-- bound display -->
-              <div ng-show="false" class="col-md-6 well">
-                <div ng-show="false" class="form-group">
-                  <label>Name: </label>
-                  John Harvard
-                </div>
-                <div ng-show="false" class="form-group">
-                  <label>Transition Date: </label>
-                  today!
-                </div>
-                <div ng-show="false" class="form-group">
-                  <label>Status: </label>
-                  drop-off
-                </div>
-                <div ng-show="false" class="form-group">
-                  <label>Location: </label>
-                  right here
+                    <div class="form-group">
+                      <label for="pickupDropoff">Travel Arrangements</label>
+                      <select name="pickupDropoff" id="pickupDropoff" ng-model="formCtrl.status" required>
+                        <option name="pickupDropoff" id="pickup" value="pickup">Pick-up</option>
+                        <option name="pickupDropoff" id="dropoff" value="dropoff">Drop-off</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group" ng-show="formCtrl.status=='pickup'">
+                      <label for="location">Location</label>
+                      <textarea class="form-control" ng-model="formCtrl.location" id="location"></textarea>
+                    </div>
+                    <div class="clearfix">
+                      <button type="submit" id="submit" class="btn">Register Guest</button>
+                    </div>
+                  </form>
+
+                  <!-- bound display -->
+                  <div ng-show="true" class="col-md-6 well">
+                    <div class="form-group">
+                      <label>Guest Name: </label>
+                      {{ formCtrl.guestName }}
+                    </div>
+                    <div class="form-group">
+                      <label>Transition Date: </label>
+                      {{ formCtrl.transitionDate }}
+                    </div>
+                    <div class="form-group">
+                      <label>Status: </label>
+                      {{ formCtrl.status }}
+                    </div>
+                    <div class="form-group">
+                      <label>Location (if applicable): </label>
+                      {{ formCtrl.location }}
+                    </div>
+                  </div>
+
                 </div>
               </div>
-
             </div>
+            <!-- Tab pane 2 -->
+            <div role="tabpanel" class="tab-pane col-md-8" ng-class="{active: tabCtrl.checkTab(2)}" id="guests" ng-show="tabCtrl.checkTab(2)">
+              <div ng-controller="GuestController as thisGuestController">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Transition Date</th>
+                      <th>Status</th>
+                      <th>Location</th>
+                      <th>
+                        <button ng-click="thisGuestController.purgeDeletedGuests()" class="btn btn-danger"> <span class="glyphicon glyphicon-trash"></span> Purge Guests</button>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                    <tr ng-repeat="guest in thisGuestController.ourGuests">
+
+                      <td>
+                        <input type="text" ng-model="guest.guestName" ng-change="thisGuestController.editGuest(guest)"/>
+                      </td>
+                      <td>
+                        <input type="text" ng-model="guest.transitionDate" ng-change="thisGuestController.editGuest(guest)"/>
+                      </td>
+                      <td>
+                        <button class="btn btn-default" ng-click="thisGuestController.incrementGuestStatus(guest)">
+                          {{guest.status}}
+                        </button>
+                      </td>
+                      <td>
+                        <input type="text" ng-model="guest.location" ng-change="thisGuestController.editGuest(guest)"/>
+                      </td>
+                      <td ng-switch on="guest.recordState">
+                        <span ng-switch-when="pending removal">Guest Deleted</span>
+                        <a ng-switch-default class="btn-sm btn-warning" ng-click="thisGuestController.removeGuest(guest)">
+                          <span class="glyphicon glyphicon-remove"></span> Remove Guest</a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
           </div>
-
-          <!-- Tab pane 2 -->
-          <div role="tabpanel" class="tab-pane" id="guests">
-            <ul class="list-unstyled">
-              <li>
-
-              </li>
-            </ul>
-          </div>
-
         </div>
       </div>
     </div>
-
   </body>
 </html>

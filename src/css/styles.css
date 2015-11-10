@@ -1,0 +1,8 @@
+/* Override and custom styles */
+.clearfix {
+  clear: both;
+  margin-top: 5px;
+}
+#shuffleGuest {
+  margin-top: 20px!important;
+}
